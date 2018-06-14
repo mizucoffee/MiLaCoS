@@ -1,0 +1,43 @@
+.login {
+  width: 100vw;
+  height: 100vh;
+  background-color: #B5B4FF;
+  overflow: hidden;
+}
+
+.login-menu {
+  height: 360px;
+  width: 480px;
+  margin: calc(calc(100vh - 392px) / 2) calc(calc(100vw - 512px) / 2);
+  background-color: #35347F;
+  padding: 16px;
+  border-radius: 8px;
+  svg {
+    fill: #FFF;
+    display: block;
+    margin: 12px auto 18px;
+  }
+  p {
+    margin: 0 32px 4px;
+    color: #fff;
+  }
+  .textbox {
+    width: calc(100% - 64px - 8px);
+    margin: 0 32px 24px;
+    padding: 4px;
+  }
+  .btn {
+    margin: 24px 32px 0;
+    width: calc(100% - 60px);
+    padding: 4px 0;
+  }
+  a {
+    width: fit-content;
+    margin: 8px auto 0;
+    display: block;
+    color: #FFF;
+    &:hover {
+      color: #CCC;
+    }
+  }
+}
