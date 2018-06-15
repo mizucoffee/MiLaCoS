@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../template/head %>
+    <body>
+      <% include ../template/header %>
+      <div class="center">
+        <main>
+        <form action="/adduser" method="post">
+          <label>ID</label>
+          <input type="text" name="id"><br>
+          <label>Password</label>
+          <input type="password" name="password"><br>
+          <label>Name</label>
+          <input type="text" name="name"><br>
+          <label>role</label>
+          <input type="radio" name="role" value="0">Administrator
+          <input type="radio" name="role" value="1" checked="checked">Standard
+          <br>
+          <input type="submit">
+        </form>
+        </main>
+      </div>
+    </body>
+</html>

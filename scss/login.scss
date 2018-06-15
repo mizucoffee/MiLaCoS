@@ -1,25 +1,32 @@
 .login {
   width: 100vw;
   height: 100vh;
-  background-color: #B5B4FF;
+  background-color: #eef;
+  background: url(./back.jpg);
+  background-size: cover;
   overflow: hidden;
 }
 
 .login-menu {
-  height: 360px;
+  height: fit-content;
   width: 480px;
-  margin: calc(calc(100vh - 392px) / 2) calc(calc(100vw - 512px) / 2);
-  background-color: #35347F;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  background-color: transparent;
   padding: 16px;
   border-radius: 8px;
   svg {
-    fill: #FFF;
+    fill: #fFF;
     display: block;
     margin: 12px auto 18px;
   }
   p {
     margin: 0 32px 4px;
-    color: #fff;
+    color: #FFF;
   }
   .textbox {
     width: calc(100% - 64px - 8px);
@@ -39,5 +46,19 @@
     &:hover {
       color: #CCC;
     }
+  }
+}
+
+.go-btn {
+  display: block;
+  color: #FFF;
+  width: fit-content;
+  margin: 0 auto;
+  font-size: 24pt;
+  text-align: center;
+  text-decoration: underline;
+  cursor: pointer;
+  &:hover {
+    text-decoration: none;
   }
 }

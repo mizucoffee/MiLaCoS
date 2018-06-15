@@ -9,17 +9,20 @@ const express = require('express'),
   http = require('http'),
   https = require('https'),
   fs = require('fs'),
+  crypto = require('crypto'),
   io = require('socket.io')(http),
   MongoStore = require('connect-mongo')(session),
   Schema = db.Schema
 
-db.connect(`mongodb://${config.get('server.mongo')}/`)
+db.connect(`mongodb://${config.get('server.mongo')}/milacos`)
 
 var UserSchema = new db.Schema({
     id: {type: String, required: true},
-    password: {type: String, requird: true}
+    name: {type: String, required: true},
+    role: {type: Number, required: true},
+    password: {type: String, required: true}
 });
-var User = db.model("User", UserSchema);
+var User = db.model("users", UserSchema);
 
 const passport = require('./passport')(User,db)
 const sessionMiddleware = session({
@@ -27,7 +30,7 @@ const sessionMiddleware = session({
     db: 'session',
     host: config.get('server.mongo'),
     port: '27017',
-    url: `mongodb://${config.get('server.mongo')}/twiback`
+    url: `mongodb://${config.get('server.mongo')}/milacos`
   }),
   secret: 'milacos',
   resave: false,
@@ -49,6 +52,11 @@ io.on('connection',async socket => {
   console.log('connected')
 })
 
+const isLogined = (req, res, next) => {
+  if(req.isAuthenticated()) return next();
+  res.redirect("/");
+};
+
 var options = {
   cert: fs.readFileSync('./cert/fullchain.pem'),
   key:  fs.readFileSync('./cert/privkey.pem')
@@ -58,13 +66,48 @@ var server = https.createServer(options,app);
 server.listen(config.get('server.https_port'), () => console.log("Node.js is listening to PORT:" + server.address().port));
 
 app.get('/', (req, res) => {
-  res.render('pages/index');
+  res.render('pages/index',{'isLogined': req.isAuthenticated()});
 });
 
-app.get('/main', (req, res) => {
-  res.render('pages/main');
+app.get('/dashboard', isLogined, (req, res) => {
+  res.render('pages/dashboard');
 });
 
-app.post('/login', passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
-  res.redirect('/main');
-});
+app.post('/login', passport.authenticate('local', { successRedirect: '/dashboard',failureRedirect: '/' }));
+
+app.get('/logout', isLogined, (req, res) => {
+  req.logout()
+  res.redirect('/')
+})
+
+app.get('/adduser', (req,res) => {
+  res.render('pages/adduser');
+})
+
+app.post('/adduser', async (req,res) => {
+  console.log(req.body)
+  const result = await (new Promise((resolve,reject) => {
+    User.findOne({ id: req.body.id }, (err,result) => {
+      if(err) reject(err);
+      console.log(result)
+      resolve(result !== null)
+    });
+  })).catch((e) => console.log(e))
+  if (result) return res.send('confrict')
+
+  const sha512 = crypto.createHash('sha512')
+  sha512.update(req.body.password)
+  var hash = sha512.digest('hex');
+  console.log(hash)
+
+  let u = new User({
+    id: req.body.id,
+    password: hash,
+    name: req.body.name,
+    role: req.body.role
+  })
+  u.save((err,result) => {
+    if (err) { console.log(err); }
+    res.send('success');
+  });
+})

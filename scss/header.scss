@@ -1,0 +1,21 @@
+header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 10;
+  height: 48px;
+  color: #444;
+  background-color: #04067a;
+
+  svg {
+    margin: 6px 0;
+    stroke: transparent;
+    fill: #FFF;
+  }
+
+  .center {
+    padding: 0;
+  }
+
+}
