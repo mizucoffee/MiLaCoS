@@ -6,14 +6,22 @@ const express = require('express'),
   db = require('mongoose'),
   bodyParser = require('body-parser'),
   app = express(),
-  http = require('http').Server(app),
+  http = require('http'),
+  https = require('https'),
+  fs = require('fs'),
   io = require('socket.io')(http),
   MongoStore = require('connect-mongo')(session),
   Schema = db.Schema
 
-db.connect(`mongodb://${config.get('server.mongo')}/twiback`)
+db.connect(`mongodb://${config.get('server.mongo')}/`)
 
-// const passport = require('./passport')(User,db)
+var UserSchema = new db.Schema({
+    id: {type: String, required: true},
+    password: {type: String, requird: true}
+});
+var User = db.model("User", UserSchema);
+
+const passport = require('./passport')(User,db)
 const sessionMiddleware = session({
   store: new MongoStore({
     db: 'session',
@@ -30,10 +38,10 @@ io.use((socket,next) => sessionMiddleware(socket.request,socket.request.res,next
 
 app.disable('x-powered-by')
 app.use(sessionMiddleware)
-// app.use(bodyParser.urlencoded({ limit:'100mb',extended: true }))
-// app.use(bodyParser.json({limit:'100mb'}))
-// app.use(passport.initialize())
-// app.use(passport.session())
+app.use(bodyParser.urlencoded({ limit:'100mb',extended: true }))
+app.use(bodyParser.json({limit:'100mb'}))
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(express.static('./public'))
 app.set('view engine', 'ejs');
 
@@ -41,9 +49,22 @@ io.on('connection',async socket => {
   console.log('connected')
 })
 
-const server = http.listen(process.env.PORT || config.get('server.port'), () => console.log("Node.js is listening to PORT:" + server.address().port))
+var options = {
+  cert: fs.readFileSync('./cert/fullchain.pem'),
+  key:  fs.readFileSync('./cert/privkey.pem')
+};
 
-app.get('/', async (req, res) => {
+var server = https.createServer(options,app);
+server.listen(config.get('server.https_port'), () => console.log("Node.js is listening to PORT:" + server.address().port));
+
+app.get('/', (req, res) => {
   res.render('pages/index');
 });
 
+app.get('/main', (req, res) => {
+  res.render('pages/main');
+});
+
+app.post('/login', passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
+  res.redirect('/main');
+});
