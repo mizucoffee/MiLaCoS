@@ -12,17 +12,29 @@ const express = require('express'),
   crypto = require('crypto'),
   io = require('socket.io')(http),
   MongoStore = require('connect-mongo')(session),
+  execSync = require('child_process').execSync,
   Schema = db.Schema
 
 db.connect(`mongodb://${config.get('server.mongo')}/milacos`)
 
-var UserSchema = new db.Schema({
+var UserSchema = new Schema({
     id: {type: String, required: true},
     name: {type: String, required: true},
     role: {type: Number, required: true},
     password: {type: String, required: true}
 });
 var User = db.model("users", UserSchema);
+
+const VPSSchema = new Schema({
+  name: {type: String, required: true},
+  container_id: {type: String, required: true},
+  domain: {type: String, required: true},
+  os: {type: String, required: true},
+  core: {type: String, required: true},
+  memory: {type: String, required: true},
+  user_id: {type: String, required: true}
+}, {timestamps: { createdAt: 'created_at' }})
+var VPS = db.model("vps", VPSSchema);
 
 const passport = require('./passport')(User,db)
 const sessionMiddleware = session({
@@ -80,16 +92,51 @@ app.get('/logout', isLogined, (req, res) => {
   res.redirect('/')
 })
 
+app.get('/vps', isLogined, async (req,res) => {
+  let vps = await (new Promise((resolve,reject) => {
+    VPS.find({user_id:req.user._id},(err,result) => {
+      if(err)            return reject("err")
+      resolve(result)
+    })
+  })
+  ).catch((e) => [])
+  vps = vps.map((e,i,a) => {
+    e.status = execSync(`docker ps -aqf "id=${e.container_id.substr(0,12)}" --format "{{.Status}}" | awk '{print $1 }'`).toString();
+    return e
+  })
+  res.render('pages/vps', {vps: vps});
+})
+
+app.get('/vps/new', isLogined, (req,res) => {
+  res.render('pages/vps-new');
+})
+
+app.post('/vps/new', isLogined, (req,res) => {
+  // Math.floor( Math.random() * 16384 ) + 49152;
+  let container_id = execSync(`docker run --cpus ${req.body.core} -m ${req.body.memory}G -d ssh_${req.body.os}`).toString()
+  let v = new VPS({
+    name: req.body.name,
+    container_id: container_id,
+    domain: "test",
+    os: req.body.os,
+    memory: req.body.memory,
+    core: req.body.core,
+    user_id: req.user._id
+  })
+  v.save((err,result) => {
+    if (err) { console.log(err); }
+    res.redirect('/vps#created');
+  })
+})
+
 app.get('/adduser', (req,res) => {
   res.render('pages/adduser');
 })
 
 app.post('/adduser', async (req,res) => {
-  console.log(req.body)
   const result = await (new Promise((resolve,reject) => {
     User.findOne({ id: req.body.id }, (err,result) => {
       if(err) reject(err);
-      console.log(result)
       resolve(result !== null)
     });
   })).catch((e) => console.log(e))

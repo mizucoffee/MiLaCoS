@@ -9,7 +9,7 @@ body {
 
 main {
   padding: 16px;
-  width: 100%;
+  width: calc(100% - 32px);
   margin-top: 48px;
 }
 
@@ -17,4 +17,55 @@ main {
   min-width: 780px;
   max-width: 950px;
   margin: 0 auto;
+}
+
+.clearfix {
+  clear: both;
+}
+h1 {
+  height: 36px;
+  display: block;
+  font-size: 36px;
+  line-height: 1em;
+  margin: 24px 0;
+  color: #04067a;
+}
+
+form {
+  margin-left: 8px;
+}
+
+label {
+  font-size: 16pt;
+  color: #04067a;
+  display: block;
+}
+input {
+  margin-top: 4px;
+  margin-left: 8px;
+  display: block;
+}
+input[type="text"], input[type="password"] {
+  padding: 8px;
+  width: 240px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 2px solid #04067a;
+}
+
+input[type="radio"] {
+  display: inline;
+  margin: 4px 4px 4px 8px;
+}
+
+input[type="submit"] {
+  font-size: 18px;
+  padding: 12px 16px;
+  line-height: 1em;
+  color: #FFF;
+  border-radius: 12px;
+  background: #04067a;
+  &:hover {
+    opacity: 0.7
+  }
 }

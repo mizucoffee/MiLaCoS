@@ -6,16 +6,17 @@
       <% include ../template/header %>
       <div class="center">
         <main>
+        <h1>Add User</h1>
         <form action="/adduser" method="post">
           <label>ID</label>
-          <input type="text" name="id"><br>
+          <input type="text" name="id" required><br>
           <label>Password</label>
-          <input type="password" name="password"><br>
+          <input type="password" name="password" required><br>
           <label>Name</label>
-          <input type="text" name="name"><br>
+          <input type="text" name="name" required><br>
           <label>role</label>
-          <input type="radio" name="role" value="0">Administrator
-          <input type="radio" name="role" value="1" checked="checked">Standard
+          <input type="radio" name="role" value="0">Administrator<br>
+          <input type="radio" name="role" value="1" checked="checked">Standard<br>
           <br>
           <input type="submit">
         </form>

@@ -1,0 +1,57 @@
+.vps {
+  .left {
+    float: left;
+  }
+
+  .right {
+    float: right;
+  }
+  .vps-new {
+    float: right;
+    height: 26px;
+    display: inline;
+    margin: 24px 0;
+    vertical-align: middle;
+    padding: 10px 24px 0;
+    line-height: 1em;
+    color: #FFF;
+    border-radius: 25px;
+    background: #04067a;
+    &:hover {
+      opacity: 0.7
+    }
+  }
+
+  .vps-table {
+    width: 100%;
+    margin: 0 auto;
+    font-size: 16px;
+    text-align: center;
+    line-height: 1em;
+    border-collapse: collapse;
+    tr {
+      border-top: 1px #CCC solid;
+    }
+    .vps-table-head {
+      border: none;
+    }
+    td {
+      padding: 16px;
+    }
+    th {
+      padding: 8px;
+      color: #04067a;
+    }
+  }
+  #created {
+    display: none;
+    background-color: #ccF;
+    padding: 16px;
+    border: 1px solid #aac;
+    border-radius: 5px;
+    color: #04067a;
+    &:target {
+      display: block;
+    }
+  }
+}

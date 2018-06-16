@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <% include ../template/head %>
+  <body>
+    <% include ../template/header %>
+    <div class="center">
+      <main>
+      <h1>New VPS</h1>
+      <form action="/vps/new" method="post">
+        <label>Server Name</label>
+        <input type="text" name="name" required/><br>
+        <label>OS</label>
+        <select name="os">
+          <option value="ubuntu">Ubuntu</option>
+          <option value="debian">Debian</option>
+          <option value="centos">CentOS</option>
+          <option value="base/archlinux">Arch Linux</option>
+        </select>
+        <label>Core: <span id="core_span">1</span></label>
+        <input type="range" id="core" name="core" min="1" max="8" value="1"/><br>
+        <label>Memory: <span id="mem_span">1</span>GB</label>
+        <input type="range" id="mem" name="memory" min="1" max="8" value="1"/><br>
+        <label>Private Key Password</label>
+        <input type="password" name="password" required/><br>
+        <input type="submit"/>
+      </form>
+      </main>
+    </div>
+  </body>
+  <script>
+    const core = document.getElementById('core');
+    const core_span = document.getElementById('core_span');
+    const mem = document.getElementById('mem');
+    const mem_span = document.getElementById('mem_span');
+    core.addEventListener('input', () => {
+      core_span.innerHTML = core.value;
+    });
+    mem.addEventListener('input', () => {
+      mem_span.innerHTML = mem.value;
+    });
+  </script>
+</html>

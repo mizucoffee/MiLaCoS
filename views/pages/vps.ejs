@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../template/head %>
+    <body>
+      <% include ../template/header %>
+      <div class="center vps">
+        <main>
+        <div id="created">New VPS Success! <a class="right" href="#">x</a></div>
+        <h1 class="left">VPS</h1>
+        <a class="vps-new" href="/vps/new">new</a>
+        <table class="vps-table clearfix">
+          <tr class="vps-table-head">
+            <th>Name</th>
+            <th>OS</th>
+            <th>Status</th>
+            <th>Core</th>
+            <th>Mem</th>
+            <th>Domain</th>
+            <th>ID</th>
+          </tr>
+          <!-- <tr>
+            <td>Example Server</td>
+            <td>Running</td>
+            <td>4</td>
+            <td>2048MB</td>
+            <td>3x5Kd.mizucoffee.net</td>
+            <td><a href="edit">Edit</a></td>
+            </tr>-->
+            <% vps.forEach((item) => { %>
+            <tr>
+              <td><%= item.name %></td>
+              <td><%= item.os %></td>
+              <td><%= item.status %></td>
+              <td><%= item.core %></td>
+              <td><%= item.memory %>GB</td>
+              <td><%= item.domain %>.mizucoffee.net</td>
+              <td><%= item.container_id.substr(0,12)%></td>
+            </tr>
+            <% }) %>
+        </table>
+        </main>
+      </div>
+    </body>
+</html>
