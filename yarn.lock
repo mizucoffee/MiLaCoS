@@ -143,6 +143,10 @@ bluebird@3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
 
+bluebird@3.5.x:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
+
 body-parser@1.18.2:
   version "1.18.2"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.18.2.tgz#87678a19d84b47d859b83199bd59bce222b10454"
@@ -1743,6 +1747,12 @@ tar@^2.0.0:
     block-stream "*"
     fstream "^1.0.2"
     inherits "2"
+
+telnet-client@^0.15.5:
+  version "0.15.5"
+  resolved "https://registry.yarnpkg.com/telnet-client/-/telnet-client-0.15.5.tgz#f4720e8b359ea5cb97b961faf5298f849b7820f1"
+  dependencies:
+    bluebird "3.5.x"
 
 to-array@0.1.4:
   version "0.1.4"

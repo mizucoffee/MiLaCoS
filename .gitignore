@@ -58,3 +58,5 @@ typings/
 .env
 config/default.json
 public/style.css
+
+cert/

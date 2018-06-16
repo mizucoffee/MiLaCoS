@@ -5,7 +5,8 @@ const config = require('config'),
   crypto = require('crypto'),
   ObjectID = mongoose.Types.ObjectId
 
-module.exports = (User,db) => {
+
+module.exports = (db,VPS,User) => {
 
   passport.use(
     new LocalStrategy(
