@@ -1,5 +1,6 @@
 const
   router = require('express').Router(),
+  exec = require('child_process').exec,
   execSync = require('child_process').execSync,
   tool = require('../tool')
 
