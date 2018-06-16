@@ -10,6 +10,7 @@ const express = require('express'),
   crypto = require('crypto'),
   io = require('socket.io')(http),
   MongoStore = require('connect-mongo')(session),
+  exec = require('child_process').exec,
   execSync = require('child_process').execSync,
   Schema = db.Schema
 
@@ -32,8 +33,10 @@ const sessionMiddleware = session({
   saveUninitialized: false
 })
 
-// execSync(`docker ps -aqf "id=${e.container_id.substr(0,12)}" --format "{{.Status}}" | awk '{print $1 }'`).toString();
-
+let nginx = exec(`nginx`, (err,stdout,stderr) => {
+  if (err) { console.log(err); }
+  console.log(stdout);
+});
 
 io.use((socket,next) => sessionMiddleware(socket.request,socket.request.res,next))
 
@@ -52,7 +55,7 @@ io.on('connection',async socket => {
 
 const server = app.listen(process.env.PORT || 3000,function(){})
 
-app.use("/vps",require('./routes/vps')(db,VPS,User))
+app.use("/vps",require('./routes/vps')(db,VPS,User,nginx))
 
 
 
