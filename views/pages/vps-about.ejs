@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../template/head %>
+    <body>
+      <% include ../template/header %>
+      <div class="center">
+        <main>
+        <h1>About VPS</h1> <h2><%= vps.name %></h2>
+
+        <% if(status === "Up") { %>
+        <a class="button" href="/vps/shutdown?id=<%= vps.container_id %>">Shutdown</a>
+        <% } else { %>
+        <a class="button" href="/vps/poweron?id=<%= vps.container_id %>">Power on</a>
+        <% } %>
+        <a class="button" href="/vps/key?id=<%= vps.container_id %>">Download Key</a>
+        <blockquote>$ chmod 700 <%= vps.container_id %>.id_rsa<br>
+        $ ssh root@<%= vps.domain %>.mizucoffee.net -i <%= vps.container_id %>.id_rsa</blockquote>
+        <a class="button" href="/vps/remove?id=<%= vps.container_id %>">Delete Server</a>
+        <div>container_id: <%= vps.container_id %></div>
+        <div>domain: <%= vps.domain %>.mizucoffee.net</div>
+        <div>os: <%= vps.os %></div>
+        <div>memory: <%= vps.memory %></div>
+        <div>core: <%= vps.core %></div>
+        <div>created at: <%= vps.createdAt %></div>
+        <div>status: <%= status %></div>
+
+        </main>
+      </div>
+    </body>
+</html>

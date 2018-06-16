@@ -5,6 +5,9 @@
 
 body {
   min-width: 780px;
+  background: linear-gradient(-45deg, rgba(255, 255, 255, .8), rgba(255, 255, 255, .8)) fixed, url(/conoha_pronama.jpg) fixed;
+  background-size: cover;
+  background-position: center;
 }
 
 main {
@@ -28,6 +31,10 @@ h1 {
   font-size: 36px;
   line-height: 1em;
   margin: 24px 0;
+  color: #04067a;
+}
+
+h2 {
   color: #04067a;
 }
 
@@ -64,6 +71,22 @@ input[type="submit"] {
   line-height: 1em;
   color: #FFF;
   border-radius: 12px;
+  background: #04067a;
+  &:hover {
+    opacity: 0.7
+  }
+}
+
+.button {
+  height: 26px;
+  width: fit-content;
+  margin: 24px 0;
+  vertical-align: middle;
+  padding: 10px 24px 0;
+  line-height: 1em;
+  color: #FFF;
+  border-radius: 25px;
+  display: block;
   background: #04067a;
   &:hover {
     opacity: 0.7

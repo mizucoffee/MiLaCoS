@@ -7,8 +7,6 @@ const express = require('express'),
   bodyParser = require('body-parser'),
   app = express(),
   http = require('http'),
-  https = require('https'),
-  fs = require('fs'),
   crypto = require('crypto'),
   io = require('socket.io')(http),
   MongoStore = require('connect-mongo')(session),
@@ -34,6 +32,8 @@ const sessionMiddleware = session({
   saveUninitialized: false
 })
 
+// execSync(`docker ps -aqf "id=${e.container_id.substr(0,12)}" --format "{{.Status}}" | awk '{print $1 }'`).toString();
+
 
 io.use((socket,next) => sessionMiddleware(socket.request,socket.request.res,next))
 
@@ -50,15 +50,7 @@ io.on('connection',async socket => {
   console.log('connected')
 })
 
-var options = {
-  cert: fs.readFileSync('./cert/fullchain.pem'),
-  key:  fs.readFileSync('./cert/privkey.pem')
-};
-
-var server = https.createServer(options,app);
-server.listen(config.get('server.https_port'), () => console.log("Node.js is listening to PORT:" + server.address().port));
-
-
+const server = app.listen(process.env.PORT || 3000,function(){})
 
 app.use("/vps",require('./routes/vps')(db,VPS,User))
 

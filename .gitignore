@@ -59,4 +59,5 @@ typings/
 config/default.json
 public/style.css
 
-cert/
+cert/*
+keys/*

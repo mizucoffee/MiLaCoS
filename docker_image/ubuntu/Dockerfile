@@ -1,15 +1,14 @@
 FROM ubuntu
 
-RUN apt-get update && apt-get install -y openssh-server
-RUN mkdir /var/run/sshd
-RUN echo 'root:test' | chpasswd
-RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-# SSH login fix. Otherwise user is kicked off after login
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+RUN apt-get update && apt-get install -y openssh-server nano vim wget curl
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
+RUN mkdir -p /root/.ssh; chmod 700 /root/.ssh
+RUN mkdir /var/run/sshd
+
+ADD ./issue.net /etc/
+ADD ./sshd_config /etc/ssh/
 
 EXPOSE 22
-CMD ["/usr/sbin/sshd", "-D"]<Paste>
+CMD ["/usr/sbin/sshd", "-D"]

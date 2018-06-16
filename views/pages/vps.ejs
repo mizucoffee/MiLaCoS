@@ -29,7 +29,7 @@
             </tr>-->
             <% vps.forEach((item) => { %>
             <tr>
-              <td><%= item.name %></td>
+              <td><a href="/vps/about?id=<%= item.container_id %>"><%= item.name %></a></td>
               <td><%= item.os %></td>
               <td><%= item.status %></td>
               <td><%= item.core %></td>

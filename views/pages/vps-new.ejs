@@ -22,7 +22,7 @@
         <label>Memory: <span id="mem_span">1</span>GB</label>
         <input type="range" id="mem" name="memory" min="1" max="8" value="1"/><br>
         <label>Private Key Password</label>
-        <input type="password" name="password" required/><br>
+        <input type="password" name="password" pattern=".{5,}" title="must be alphanumeric in 5 chars" required/><br>
         <input type="submit"/>
       </form>
       </main>
