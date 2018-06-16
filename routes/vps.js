@@ -40,7 +40,7 @@ module.exports = (db,VPS,User,nginx) => {
   router.post('/new', tool.isLogined, (req,res) => {
     // Math.floor( Math.random() * 16384 ) + 49152;
     let name = Math.random().toString(36).slice(-5) //ユニークにすべき
-    let container_id = execSync(`docker run --net=mizucoffee-net-network --name ${name} --cpus ${req.body.core} -m ${req.body.memory}G -d ssh_${req.body.os}`).toString().substr(0,12)
+    let container_id = execSync(`docker run --net=mizucoffeenet_mizucoffee-net-network --name ${name} --cpus ${req.body.core} -m ${req.body.memory}G -d ssh_${req.body.os}`).toString().substr(0,12)
     execSync(`ssh-keygen -t rsa -N ${req.body.password} -f ./keys/${container_id}`)
     execSync(`docker cp ./keys/${container_id}.pub ${container_id}:/root/.ssh/`)
     execSync(`docker exec ${container_id} sh -c "cat /root/.ssh/${container_id}.pub >> /root/.ssh/authorized_keys;chmod 600 /root/.ssh/authorized_keys"`)
