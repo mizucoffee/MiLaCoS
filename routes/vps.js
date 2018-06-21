@@ -38,25 +38,39 @@ module.exports = (db,VPS,User,ssh) => {
     res.render('pages/vps-new');
   })
 
-  router.post('/new', tool.isLogined, (req,res) => {
-    // Math.floor( Math.random() * 16384 ) + 49152;
+  router.post('/new', tool.isLogined, async (req,res) => {
+//    let port = 0;
+//    while(true){
+//      port = Math.floor( Math.random() * 16384 ) + 49152;
+//      let a = await (new Promise((resolve,reject) => {
+//        VPS.find({port: port},(err,result) => {
+//          if(err)            return reject("err")
+//          if(result != null) return resolve("found");
+//          resolve("notfound")
+//        })
+//      }).catch((e) => console.log(e))
+//      )
+//      if (a == "notfound") break;
+//    }
     let name = Math.random().toString(36).slice(-5) //ユニークにすべき
     let container_id = execSync(`docker run --restart=always --net=mizucoffeenet_mizucoffee-net-network --name ${name} --cpus ${req.body.core} -m ${req.body.memory}G -d ssh_${req.body.os}`).toString().substr(0,12)
-    // execSync(`ssh-keygen -t rsa -N ${req.body.password} -f ./keys/${container_id}`)
-    // execSync(`docker cp ./keys/${container_id}.pub ${container_id}:/root/.ssh/`)
-    // execSync(`docker exec ${container_id} sh -c "cat /root/.ssh/${container_id}.pub >> /root/.ssh/authorized_keys;chmod 600 /root/.ssh/authorized_keys"`)
     execSync(`mkdir /ssh/config/${container_id}; echo 'root@${name}' > /ssh/config/${container_id}/sshpiper_upstream`)
+    execSync(`ssh-keygen -t rsa -N '${req.body.password}' -f /ssh/config/${container_id}/id_rsa-client && mv /ssh/config/${container_id}/id_rsa-client.pub /ssh/config/${container_id}/authorized_keys;chmod 600 /ssh/config/${container_id}/authorized_keys`)
+    execSync(`ssh-keygen -t rsa -N '' -f /ssh/config/${container_id}/id_rsa`)
+    execSync(`docker cp /ssh/config/${container_id}/id_rsa.pub ${container_id}:/root/.ssh/`)
+    execSync(`rm /ssh/config/${container_id}/id_rsa.pub`)
+    execSync(`docker exec ${container_id} sh -c "mv /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys"`)
     ssh.kill()
     ssh = exec(`/ssh/start.sh`, (err,stdout,stderr) => {
       if (err) console.log(err)
       console.log(stdout)
     })
-    execSync(`docker exec ${container_id} sh -c "echo 'root:${req.body.password}' | chpasswd"`)
     execSync(`echo 'server {listen 80; server_name ${container_id}.vps.mizucoffee.net;location / {proxy_pass http://${name}/;}}' > /etc/nginx/conf.d/${container_id}.conf`)
     execSync(`nginx -s reload`)
 
     let v = new VPS({
       name: req.body.name,
+      // port: port,
       container_id: container_id,
       domain: `${container_id}.vps.mizucoffee.net`,
       os: req.body.os,
@@ -92,7 +106,7 @@ module.exports = (db,VPS,User,ssh) => {
   })
 
   router.get('/key', tool.isLogined, isVPSExist, async (req,res) => {
-    res.download(`keys/${req.query.id}`,`${req.query.id}.id_rsa`)
+    res.download(`/ssh/config/${req.query.id}/id_rsa-client`,`${req.query.id}.id_rsa`)
   })
 
   router.get('/remove', tool.isLogined, isVPSExist, async (req,res) => {
