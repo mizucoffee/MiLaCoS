@@ -13,12 +13,10 @@
         <% } else { %>
         <a class="button" href="/vps/poweron?id=<%= vps.container_id %>">Power on</a>
         <% } %>
-        <a class="button" href="/vps/key?id=<%= vps.container_id %>">Download Key</a>
-        <blockquote>$ chmod 700 <%= vps.container_id %>.id_rsa<br>
-        $ ssh root@<%= vps.domain %>.mizucoffee.net -i <%= vps.container_id %>.id_rsa</blockquote>
+        <blockquote>$ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null <%= vps.container_id %>@milacos.mizucoffee.net</blockquote>
         <a class="button" href="/vps/remove?id=<%= vps.container_id %>">Delete Server</a>
         <div>container_id: <%= vps.container_id %></div>
-        <div>domain: <%= vps.domain %>.mizucoffee.net</div>
+        <div>domain: <%= vps.domain %></div>
         <div>os: <%= vps.os %></div>
         <div>memory: <%= vps.memory %></div>
         <div>core: <%= vps.core %></div>

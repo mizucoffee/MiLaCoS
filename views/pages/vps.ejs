@@ -17,16 +17,7 @@
             <th>Core</th>
             <th>Mem</th>
             <th>Domain</th>
-            <th>ID</th>
           </tr>
-          <!-- <tr>
-            <td>Example Server</td>
-            <td>Running</td>
-            <td>4</td>
-            <td>2048MB</td>
-            <td>3x5Kd.mizucoffee.net</td>
-            <td><a href="edit">Edit</a></td>
-            </tr>-->
             <% vps.forEach((item) => { %>
             <tr>
               <td><a href="/vps/about?id=<%= item.container_id %>"><%= item.name %></a></td>
@@ -34,8 +25,7 @@
               <td><%= item.status %></td>
               <td><%= item.core %></td>
               <td><%= item.memory %>GB</td>
-              <td><%= item.domain %>.mizucoffee.net</td>
-              <td><%= item.container_id.substr(0,12)%></td>
+              <td><a href="http://<%= item.domain %>/" target="_blank"><%= item.domain %></a></td>
             </tr>
             <% }) %>
         </table>

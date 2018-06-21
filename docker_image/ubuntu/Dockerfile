@@ -10,5 +10,4 @@ RUN mkdir /var/run/sshd
 ADD ./issue.net /etc/
 ADD ./sshd_config /etc/ssh/
 
-EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
