@@ -19,6 +19,13 @@ module.exports = (db,VPS,User,ssh) => {
     next();
   }
 
+  const random = () => {
+    let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    let result = ""
+    for(var i=0;i<5;i++) result += str.charAt(Math.floor(Math.random() * str.length))
+    return result;
+  }
+
   router.get('/', tool.isLogined, async (req,res) => {
     let vps = await (new Promise((resolve,reject) => {
       VPS.find({user_id:req.user._id},(err,result) => {
@@ -39,22 +46,35 @@ module.exports = (db,VPS,User,ssh) => {
   })
 
   router.post('/new', tool.isLogined, async (req,res) => {
-//    let port = 0;
-//    while(true){
-//      port = Math.floor( Math.random() * 16384 ) + 49152;
-//      let a = await (new Promise((resolve,reject) => {
-//        VPS.find({port: port},(err,result) => {
-//          if(err)            return reject("err")
-//          if(result != null) return resolve("found");
-//          resolve("notfound")
-//        })
-//      }).catch((e) => console.log(e))
-//      )
-//      if (a == "notfound") break;
-//    }
-    let name = Math.random().toString(36).slice(-5) //ユニークにすべき
-    let container_id = execSync(`docker run --restart=always --net=mizucoffeenet_mizucoffee-net-network --name ${name} --cpus ${req.body.core} -m ${req.body.memory}G -d ssh_${req.body.os}`).toString().substr(0,12)
-    execSync(`mkdir /ssh/config/${container_id}; echo 'root@${name}' > /ssh/config/${container_id}/sshpiper_upstream`)
+    let port = 0;
+    while(true){
+      port = Math.floor( Math.random() * 16384 ) + 49152;
+      let a = await (new Promise((resolve,reject) => {
+        VPS.findOne({port: port},(err,result) => {
+          if(err)            return reject("err")
+          if(result != null) return resolve("found");
+          resolve("notfound")
+        })
+      }).catch((e) => console.log(e))
+      )
+      if (a == "notfound") break;
+    }
+    let addr = ""
+    while(true){
+      addr = random()
+      let a = await (new Promise((resolve,reject) => {
+        VPS.findOne({internal_addr: addr},(err,result) => {
+          if(err)            return reject("err")
+          if(result != null) return resolve("found");
+          resolve("notfound")
+        })
+      }).catch((e) => console.log(e))
+      )
+      if (a == "notfound") break;
+    }
+
+    let container_id = execSync(`docker run --restart=always --net=mizucoffeenet_mizucoffee-net-network -p ${port}:${port} --name ${addr} --cpus ${req.body.core} -m ${req.body.memory}G -d ssh_${req.body.os}`).toString().substr(0,12)
+    execSync(`mkdir /ssh/config/${container_id}; echo 'root@${addr}' > /ssh/config/${container_id}/sshpiper_upstream`)
     execSync(`ssh-keygen -t rsa -N '${req.body.password}' -f /ssh/config/${container_id}/id_rsa-client && mv /ssh/config/${container_id}/id_rsa-client.pub /ssh/config/${container_id}/authorized_keys;chmod 600 /ssh/config/${container_id}/authorized_keys`)
     execSync(`ssh-keygen -t rsa -N '' -f /ssh/config/${container_id}/id_rsa`)
     execSync(`docker cp /ssh/config/${container_id}/id_rsa.pub ${container_id}:/root/.ssh/`)
@@ -65,12 +85,13 @@ module.exports = (db,VPS,User,ssh) => {
       if (err) console.log(err)
       console.log(stdout)
     })
-    execSync(`echo 'server {listen 80; server_name ${container_id}.vps.mizucoffee.net;location / {proxy_pass http://${name}/;}}' > /etc/nginx/conf.d/${container_id}.conf`)
+    execSync(`echo 'server {listen 80; server_name ${container_id}.vps.mizucoffee.net;location / {proxy_pass http://${addr}/;}}' > /etc/nginx/conf.d/${container_id}.conf`)
     execSync(`nginx -s reload`)
 
     let v = new VPS({
       name: req.body.name,
-      // port: port,
+      internal_addr: addr,
+      port: port,
       container_id: container_id,
       domain: `${container_id}.vps.mizucoffee.net`,
       os: req.body.os,
