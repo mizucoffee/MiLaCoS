@@ -4,7 +4,7 @@ const
   execSync = require('child_process').execSync,
   tool = require('../tool')
 
-module.exports = (db,VPS,User,ssh) => {
+module.exports = (db,VPS,User) => {
 
   const isVPSExist = async (req, res, next) => {
     let vps = await (new Promise((resolve,reject) => {
@@ -46,9 +46,22 @@ module.exports = (db,VPS,User,ssh) => {
   })
 
   router.post('/new', tool.isLogined, async (req,res) => {
+    let ssh_port = 0;
+    while(true){
+      ssh_port = Math.floor( Math.random() * 8000 ) + 57153;
+      let a = await (new Promise((resolve,reject) => {
+        VPS.findOne({ssh_port: ssh_port},(err,result) => {
+          if(err)            return reject("err")
+          if(result != null) return resolve("found");
+          resolve("notfound")
+        })
+      }).catch((e) => console.log(e))
+      )
+      if (a == "notfound") break;
+    }
     let port = 0;
     while(true){
-      port = Math.floor( Math.random() * 16384 ) + 49152;
+      port = Math.floor( Math.random() * 8000 ) + 49152;
       let a = await (new Promise((resolve,reject) => {
         VPS.findOne({port: port},(err,result) => {
           if(err)            return reject("err")
@@ -73,24 +86,20 @@ module.exports = (db,VPS,User,ssh) => {
       if (a == "notfound") break;
     }
 
-    let container_id = execSync(`docker run --restart=always --net=mizucoffeenet_mizucoffee-net-network -p ${port}:${port} --name ${addr} --cpus ${req.body.core} -m ${req.body.mem}G -d ssh_${req.body.os}`).toString().substr(0,12)
-    execSync(`mkdir /ssh/config/${container_id}; echo 'root@${addr}' > /ssh/config/${container_id}/sshpiper_upstream`)
-    execSync(`ssh-keygen -t rsa -N '${req.body.password}' -f /ssh/config/${container_id}/id_rsa-client && mv /ssh/config/${container_id}/id_rsa-client.pub /ssh/config/${container_id}/authorized_keys;chmod 600 /ssh/config/${container_id}/authorized_keys`)
-    execSync(`ssh-keygen -t rsa -N '' -f /ssh/config/${container_id}/id_rsa`)
-    execSync(`docker cp /ssh/config/${container_id}/id_rsa.pub ${container_id}:/root/.ssh/`)
-    execSync(`rm /ssh/config/${container_id}/id_rsa.pub`)
-    execSync(`docker exec ${container_id} sh -c "mv /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys"`)
-    ssh.kill()
-    ssh = exec(`/ssh/start.sh`, (err,stdout,stderr) => {
-      if (err) console.log(err)
-      console.log(stdout)
-    })
+    let container_id = execSync(`docker run --restart=always --net=mizucoffeenet_mizucoffee-net-network -p ${port}:${port} -p  ${ssh_port}:22 --name ${addr} --cpus ${req.body.core} -m ${req.body.mem}G -d ssh_${req.body.os}`).toString().substr(0,12)
+    //    execSync(`mkdir /ssh/config/${container_id}; echo 'root@${addr}' > /ssh/config/${container_id}/sshpiper_upstream`)
+    execSync(`ssh-keygen -t rsa -N '${req.body.password}' -f ./keys/${container_id}.id_rsa`)
+    //    execSync(`ssh-keygen -t rsa -N '' -f /ssh/config/${container_id}/id_rsa`)
+    execSync(`docker cp ./keys/${container_id}.id_rsa.pub ${container_id}:/root/.ssh/`)
+    execSync(`rm ./keys/${container_id}.id_rsa.pub`)
+    execSync(`docker exec ${container_id} sh -c "mv /root/.ssh/${container_id}.id_rsa.pub /root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys"`)
     execSync(`echo 'server {listen 80; server_name ${container_id}.vps.mizucoffee.net;location / {proxy_pass http://${addr}/;}}' > /etc/nginx/conf.d/${container_id}.conf`)
     execSync(`nginx -s reload`)
 
     let v = new VPS({
       name: req.body.name,
       internal_addr: addr,
+      ssh_port: ssh_port,
       port: port,
       container_id: container_id,
       domain: `${container_id}.vps.mizucoffee.net`,
@@ -127,7 +136,7 @@ module.exports = (db,VPS,User,ssh) => {
   })
 
   router.get('/key', tool.isLogined, isVPSExist, async (req,res) => {
-    res.download(`/ssh/config/${req.query.id}/id_rsa-client`,`${req.query.id}.id_rsa`)
+    res.download(`./keys/${req.query.id}.id_rsa`,`${req.query.id}.id_rsa`)
   })
 
   router.get('/remove', tool.isLogined, isVPSExist, async (req,res) => {
@@ -135,14 +144,8 @@ module.exports = (db,VPS,User,ssh) => {
     // execSync(`rm ./keys/${req.query.id}*`)
     execSync(`rm /etc/nginx/conf.d/${req.query.id}.conf`)
     execSync(`nginx -s reload`)
-    execSync(`rm -rf /ssh/config/${req.query.id}`)
-    ssh.kill()
-    ssh = exec(`/ssh/start.sh`, (err,stdout,stderr) => {
-      if (err) console.log(err)
-      console.log(stdout)
-    })
+    // execSync(`rm -rf /ssh/config/${req.query.id}`)
 
-    console.log(req.user)
     VPS.deleteOne({container_id: req.query.id ,user_id:req.user._id},(err) => {} )
     res.redirect(`/vps`)
   })

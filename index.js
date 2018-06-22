@@ -37,11 +37,6 @@ let nginx = exec(`nginx`, (err,stdout,stderr) => {
   console.log(stdout);
 });
 
-let ssh = exec(`/ssh/start.sh`, (err,stdout,stderr) => {
-  if (err) { console.log(err); }
-  console.log(stdout);
-});
-
 io.use((socket,next) => sessionMiddleware(socket.request,socket.request.res,next))
 
 app.disable('x-powered-by')
@@ -59,9 +54,7 @@ io.on('connection',async socket => {
 
 const server = app.listen(process.env.PORT || 3000,function(){})
 
-app.use("/vps",require('./routes/vps')(db,VPS,User,ssh))
-
-
+app.use("/vps",require('./routes/vps')(db,VPS,User))
 
 app.get('/', (req, res) => {
   res.render('pages/index',{'isLogined': req.isAuthenticated()});

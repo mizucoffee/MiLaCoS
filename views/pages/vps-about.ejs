@@ -15,7 +15,7 @@
         <% } %>
         <a class="button" href="/vps/key?id=<%= vps.container_id %>">Private Key Download</a>
         <blockquote>$ chmod 600 <%= vps.container_id %>.id_rsa<br>
-        $ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i <%= vps.container_id %>.id_rsa <%= vps.container_id %>@milacos.mizucoffee.net</blockquote>
+          $ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p <%= vps.ssh_port %> -i <%= vps.container_id %>.id_rsa root@milacos.mizucoffee.net</blockquote>
         <a class="button" href="/vps/remove?id=<%= vps.container_id %>">Delete Server</a>
         <div>container_id: <%= vps.container_id %></div>
         <div>domain: <%= vps.domain %></div>
