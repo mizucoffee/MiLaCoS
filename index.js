@@ -2,7 +2,6 @@
 
 const express = require('express'),
   session = require('express-session'),
-  config = require('config'),
   db = require('mongoose'),
   bodyParser = require('body-parser'),
   app = express(),
@@ -14,7 +13,7 @@ const express = require('express'),
   execSync = require('child_process').execSync,
   Schema = db.Schema
 
-db.connect(`mongodb://${config.get('server.mongo')}/milacos`)
+db.connect(`mongodb://mongo/milacos`)
 
 const VPS = require('./db/vps.js')(db),
   User = require('./db/user.js')(db),
@@ -24,9 +23,9 @@ const VPS = require('./db/vps.js')(db),
 const sessionMiddleware = session({
   store: new MongoStore({
     db: 'session',
-    host: config.get('server.mongo'),
+    host: 'mongo',
     port: '27017',
-    url: `mongodb://${config.get('server.mongo')}/milacos`
+    url: `mongodb://mongo/milacos`
   }),
   secret: 'milacos',
   resave: false,
