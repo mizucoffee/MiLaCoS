@@ -1,10 +1,8 @@
-const config = require('config'),
-  passport = require('passport'),
+const passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy,
   mongoose = require('mongoose'),
   crypto = require('crypto'),
   ObjectID = mongoose.Types.ObjectId
-
 
 module.exports = (db,VPS,User) => {
 
