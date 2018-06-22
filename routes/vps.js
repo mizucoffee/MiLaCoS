@@ -20,9 +20,9 @@ module.exports = (db,VPS,User,ssh) => {
   }
 
   const random = () => {
-    let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    let str = "abcdefghijklmnopqrstuvwxyz"
     let result = ""
-    for(var i=0;i<5;i++) result += str.charAt(Math.floor(Math.random() * str.length))
+    for(var i=0;i<10;i++) result += str.charAt(Math.floor(Math.random() * str.length))
     return result;
   }
 
