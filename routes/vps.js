@@ -73,7 +73,7 @@ module.exports = (db,VPS,User,ssh) => {
       if (a == "notfound") break;
     }
 
-    let container_id = execSync(`docker run --restart=always --net=mizucoffeenet_mizucoffee-net-network -p ${port}:${port} --name ${addr} --cpus ${req.body.core} -m ${req.body.memory}G -d ssh_${req.body.os}`).toString().substr(0,12)
+    let container_id = execSync(`docker run --restart=always --net=mizucoffeenet_mizucoffee-net-network -p ${port}:${port} --name ${addr} --cpus ${req.body.core} -m ${req.body.mem}G -d ssh_${req.body.os}`).toString().substr(0,12)
     execSync(`mkdir /ssh/config/${container_id}; echo 'root@${addr}' > /ssh/config/${container_id}/sshpiper_upstream`)
     execSync(`ssh-keygen -t rsa -N '${req.body.password}' -f /ssh/config/${container_id}/id_rsa-client && mv /ssh/config/${container_id}/id_rsa-client.pub /ssh/config/${container_id}/authorized_keys;chmod 600 /ssh/config/${container_id}/authorized_keys`)
     execSync(`ssh-keygen -t rsa -N '' -f /ssh/config/${container_id}/id_rsa`)
