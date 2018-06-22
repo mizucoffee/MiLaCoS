@@ -1,9 +1,10 @@
-FROM ubuntu
+FROM centos
 
-RUN apt-get update && apt-get install -y openssh-server nano vim wget curl net-tools
+RUN yum update && yum install -y openssh-server nano vim wget curl
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
+RUN ssh-keygen -A
 RUN mkdir -p /root/.ssh; chmod 700 /root/.ssh
 RUN mkdir /var/run/sshd
 
