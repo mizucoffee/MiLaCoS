@@ -11,13 +11,35 @@ header {
 //  background-position: 50% 6%;
   background: linear-gradient(60deg,$dark, $light);
   svg {
-    margin: 6px 0;
-    stroke: transparent;
     fill: #FFF;
+    float: left;
+    stroke: transparent !important;
   }
 
   .center {
     padding: 0;
   }
 
+  .logo {
+    padding: 6px 0;
+    margin-right:16px;
+    float: left;
+    display: block;
+    &:hover {
+      background-color: rgba(255,255,255,0.2);
+    }
+  }
+  .menu {
+    float: left;
+    color: white;
+    display: block;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 1em;
+    padding: 15px 20px;
+    margin-right: 8px;
+    &:hover {
+      background-color: rgba(255,255,255,0.2);
+    }
+  }
 }
