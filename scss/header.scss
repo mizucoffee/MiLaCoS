@@ -6,9 +6,10 @@ header {
   z-index: 10;
   height: 48px;
   color: #444;
-  background: url(./back.jpg);
-  background-size: cover;
-  background-position: 50% 6%;
+//  background: url(./back.jpg);
+//  background-size: cover;
+//  background-position: 50% 6%;
+  background: linear-gradient(60deg,$dark, $light);
   svg {
     margin: 6px 0;
     stroke: transparent;

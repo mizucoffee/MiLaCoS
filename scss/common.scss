@@ -1,3 +1,6 @@
+$light: #051aba;
+$dark : #070232;
+
 * {
   margin: 0px;
   padding: 0px;
@@ -5,9 +8,10 @@
 
 body {
   min-width: 780px;
-  background: linear-gradient(-45deg, rgba(255, 255, 255, .8), rgba(255, 255, 255, .8)) fixed, url(/conoha_pronama.jpg) fixed;
-  background-size: cover;
-  background-position: center;
+//  background: linear-gradient(-45deg, rgba(255, 255, 255, .8), rgba(255, 255, 255, .8)) fixed, url(/conoha_pronama.jpg) fixed;
+//  background-size: cover;
+//  background-position: center;
+  background: linear-gradient(0deg, #ccF,#ffF) fixed;
 }
 
 main {
@@ -31,11 +35,11 @@ h1 {
   font-size: 36px;
   line-height: 1em;
   margin: 24px 0;
-  color: #04067a;
+  color: $light;
 }
 
 h2 {
-  color: #04067a;
+  color: $light;
 }
 
 form {
@@ -44,7 +48,7 @@ form {
 
 .form-title {
   font-size: 16pt;
-  color: #04067a;
+  color: $light;
   display: block;
 }
 
@@ -63,7 +67,7 @@ input[type="text"], input[type="password"] {
   width: 240px;
   font-size: 16px;
   border-radius: 8px;
-  border: 2px solid #04067a;
+  border: 2px solid $light;
 }
 
 input[type="radio"] {
@@ -76,7 +80,7 @@ input[type="submit"] {
   line-height: 1em;
   color: #FFF;
   border-radius: 12px;
-  background: #04067a;
+  background: $light;
   &:hover {
     opacity: 0.7
   }
@@ -92,7 +96,7 @@ input[type="submit"] {
   color: #FFF;
   border-radius: 25px;
   display: block;
-  background: #04067a;
+  background: $light;
   &:hover {
     opacity: 0.7
   }

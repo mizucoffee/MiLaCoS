@@ -9,41 +9,74 @@
       <h1>New VPS</h1>
       <form action="/vps/new" method="post">
         <div class="form-title">Server Name</div>
-				<input type="text" name="name" required/><br>
-				<div class="form-title">OS</div>
+        <input type="text" name="name" required/><br>
+        <br>
+        <div class="form-title">Operating System</div>
 
-				<div class="os-container">
-					<input type="radio" id="ubuntu" name="os" value="ubuntu" class="os-radio" checked>
-					<label for="ubuntu" class="os-btn"><img src="/ubuntu.png"><br>Ubuntu<br>18.04</label>
-					<input type="radio" id="debian" name="os" value="debian" class="os-radio">
-					<label for="debian" class="os-btn"><img src="/debian.png"><br>Debian<br>9.4</label>
-					<input type="radio" id="centos" name="os" value="centos" class="os-radio">
-					<label for="centos" class="os-btn"><img src="/centos.png"><br>CentOS<br>7.5.1804</label>
-					<input type="radio" id="arch" name="os" value="arch" class="os-radio">
-					<label for="arch" class="os-btn"><img src="/arch.png"><br>Arch Linux<br>2018.06.01</label>
-				</div>
+        <div class="flex-container">
+          <input type="radio" id="ubuntu" name="os" value="ubuntu" class="os-radio" checked>
+          <label for="ubuntu" class="os-btn ubuntu">
+            <%- include('../svg/ubuntu.svg') %>Ubuntu<br>
+            <span class="version">18.04</span>
+          </label>
 
-				<div class="form-title">Core: <span id="core_span">1</span></div>
-				<input type="range" id="core" name="core" min="1" max="8" value="1"/><br>
-				<div class="form-title">Memory: <span id="mem_span">1</span>GB</div>
-				<input type="range" id="mem" name="memory" min="1" max="8" value="1"/><br>
-				<div class="form-title">Private Key Password</div>
-				<input type="password" name="password" pattern=".{5,}" title="must be alphanumeric in 5 chars" required/><br>
-				<input type="submit"/>
-			</form>
-			</main>
-		</div>
-	</body>
-	<script>
-		const core = document.getElementById('core');
-const core_span = document.getElementById('core_span');
-const mem = document.getElementById('mem');
-const mem_span = document.getElementById('mem_span');
-core.addEventListener('input', () => {
-	core_span.innerHTML = core.value;
-});
-mem.addEventListener('input', () => {
-	mem_span.innerHTML = mem.value;
-});
-	</script>
+          <input type="radio" id="debian" name="os" value="debian" class="os-radio">
+          <label for="debian" class="os-btn debian">
+            <%- include('../svg/debian.svg') %>Debian<br>
+            <span class="version">9.4</span>
+          </label>
+
+          <input type="radio" id="centos" name="os" value="centos" class="os-radio">
+          <label for="centos" class="os-btn centos")
+            <%- include('../svg/centos.svg') %>Cent OS<br>
+            <span class="version">7.5.1804</span>
+          </label>
+
+          <input type="radio" id="arch" name="os" value="arch" class="os-radio">
+          <label for="arch" class="os-btn arch">
+            <%- include('../svg/arch.svg') %>Arch Linux<br>
+            <span class="version">2018.06.01</span>
+          </label>
+        </div>
+        <br>
+
+        <div class="form-title">CPU Core</div>
+        <div class="flex-container">
+          <input type="radio" id="1core" name="core" value="1" class="core-radio" checked>
+          <label for="1core" class="core-btn"><%- include('../svg/cpu1.svg') %></label>
+          <input type="radio" id="2core" name="core" value="2" class="core-radio">
+          <label for="2core" class="core-btn"><%- include('../svg/cpu2.svg') %></label>
+          <input type="radio" id="4core" name="core" value="4" class="core-radio">
+          <label for="4core" class="core-btn"><%- include('../svg/cpu4.svg') %></label>
+          <input type="radio" id="8core" name="core" value="8" class="core-radio">
+          <label for="8core" class="core-btn"><%- include('../svg/cpu8.svg') %></label>
+          <input type="radio" id="16core" name="core" value="16" class="core-radio">
+          <label for="16core" class="core-btn"><%- include('../svg/cpu16.svg') %></label>
+        </div>
+        <br>
+
+        <div class="form-title">Memory</div>
+        <div class="flex-container">
+          <input type="radio" id="512mb" name="mem" value="1" class="core-radio" checked>
+          <label for="512mb" class="core-btn"><%- include('../svg/mem512.svg') %></label>
+          <input type="radio" id="1gb" name="mem" value="1" class="core-radio">
+          <label for="1gb" class="core-btn"><%- include('../svg/mem1.svg') %></label>
+          <input type="radio" id="2gb" name="mem" value="2" class="core-radio">
+          <label for="2gb" class="core-btn"><%- include('../svg/mem2.svg') %></label>
+          <input type="radio" id="4gb" name="mem" value="4" class="core-radio">
+          <label for="4gb" class="core-btn"><%- include('../svg/mem4.svg') %></label>
+          <input type="radio" id="8gb" name="mem" value="8" class="core-radio">
+          <label for="8gb" class="core-btn"><%- include('../svg/mem8.svg') %></label>
+          <input type="radio" id="16gb" name="mem" value="16" class="core-radio">
+          <label for="16gb" class="core-btn"><%- include('../svg/mem16.svg') %></label>
+        </div>
+        <br>
+
+        <div class="form-title">Private Key Password</div>
+        <input type="password" name="password" pattern=".{5,}" title="must be alphanumeric in 5 chars" required/><br>
+        <input type="submit"/>
+      </form>
+      </main>
+    </div>
+  </body>
 </html>

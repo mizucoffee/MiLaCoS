@@ -16,7 +16,7 @@
     line-height: 1em;
     color: #FFF;
     border-radius: 25px;
-    background: #04067a;
+    background: $light;
     &:hover {
       opacity: 0.7
     }
@@ -40,7 +40,7 @@
     }
     th {
       padding: 8px;
-      color: #04067a;
+      color: $light;
     }
   }
   #created {
@@ -49,7 +49,7 @@
     padding: 16px;
     border: 1px solid #aac;
     border-radius: 5px;
-    color: #04067a;
+    color: $light;
     &:target {
       display: block;
     }
@@ -58,34 +58,102 @@
 }
 .new-vps {
 
-  .os-container {
+  .flex-container {
     display: flex;
+    flex-wrap: wrap;
   }
 
-  .os-radio {
+  .os-radio, .core-radio {
     display: none;
   }
 
-  .os-radio:checked + .os-btn {
-    background: #b7fdff;
-  }
 
   .os-btn {
     cursor: pointer;
-    width: 150px;
-    height: 200px;
+    width: 120px;
     margin: 8px;
-    background-color: #fff;
-    border: 2px solid #88c;
-    border-radius: 5px;
+    text-align: center;
+    color: #44c;
+    font-size: 22px;
+
+    line-height: 1em;
+
+    svg {
+      max-width: 90px;
+      max-height: 90px;
+    }
+    img {
+      padding: 12px 0 4px 0;
+      max-width: 100px;
+      max-height: 100px;
+      margin: 0 auto;
+    }
+    .version {
+      display: inline-block;
+      font-size: 18px;
+      padding-bottom: 8px;
+    }
+  }
+
+  .ubuntu svg > circle {
+    fill: $dark;
+  }
+
+  .os-radio:checked + .ubuntu svg > circle {
+    fill: $light;
+  }
+
+  .debian g {
+    fill: $dark;
+  }
+
+  .os-radio:checked + .debian g {
+    fill: $light;
+  }
+
+  .centos g path:nth-child(-n+4){
+    fill: $dark;
+  }
+
+  .os-radio:checked + .centos g path:nth-child(-n+4) {
+    fill: $light;
+  }
+
+  .arch path {
+    fill: $dark;
+  }
+
+  .os-radio:checked + .arch path {
+    fill: $light;
+  }
+
+  .core-btn {
+    cursor: pointer;
+    width: 120px;
+    margin: 8px;
+    background-color: transparent;
     text-align: center;
     font-size: 22px;
-    color: #44c;
+    color: $dark;
+    svg {
+      fill: $dark;
+      max-width: 100px;
+      max-height: 100px;
+    }
+    path {
+      stroke: transparent !important;
+    }
     img {
       padding: 20px 0 8px 0;
       max-width: 100px;
       max-height: 100px;
       margin: 0 auto;
     }
+  }
+  .core-radio:checked + .core-btn {
+    svg {
+      fill: $light;
+    }
+    color: $light;
   }
 }

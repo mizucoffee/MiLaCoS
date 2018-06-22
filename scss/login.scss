@@ -1,10 +1,11 @@
 .login {
   width: 100vw;
   height: 100vh;
-  background-color: #eef;
-  background: url(./back.jpg);
-  background-size: cover;
-  background-position: center;
+//  background-color: #eef;
+//  background: url(./back.jpg);
+//  background-size: cover;
+//  background-position: center;
+  background: linear-gradient(60deg,$dark, $light );
   overflow: hidden;
 }
 
