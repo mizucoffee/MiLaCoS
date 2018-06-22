@@ -95,7 +95,7 @@ module.exports = (db,VPS,User,ssh) => {
       container_id: container_id,
       domain: `${container_id}.vps.mizucoffee.net`,
       os: req.body.os,
-      memory: req.body.memory,
+      memory: req.body.mem,
       core: req.body.core,
       user_id: req.user._id
     })
