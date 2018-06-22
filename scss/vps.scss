@@ -54,4 +54,38 @@
       display: block;
     }
   }
+
+}
+.new-vps {
+
+  .os-container {
+    display: flex;
+  }
+
+  .os-radio {
+    display: none;
+  }
+
+  .os-radio:checked + .os-btn {
+    background: #b7fdff;
+  }
+
+  .os-btn {
+    cursor: pointer;
+    width: 150px;
+    height: 200px;
+    margin: 8px;
+    background-color: #fff;
+    border: 2px solid #88c;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 22px;
+    color: #44c;
+    img {
+      padding: 20px 0 8px 0;
+      max-width: 100px;
+      max-height: 100px;
+      margin: 0 auto;
+    }
+  }
 }

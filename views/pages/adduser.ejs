@@ -8,15 +8,15 @@
         <main>
         <h1>Add User</h1>
         <form action="/adduser" method="post">
-          <label>ID</label>
+          <div class="form-title">ID</div>
           <input type="text" name="id" required><br>
-          <label>Password</label>
+          <div class="form-title">Password</div>
           <input type="password" name="password" required><br>
-          <label>Name</label>
+          <div class="form-title">Name</div>
           <input type="text" name="name" required><br>
-          <label>role</label>
-          <input type="radio" name="role" value="0">Administrator<br>
-          <input type="radio" name="role" value="1" checked="checked">Standard<br>
+          <div class="form-title">Role</div>
+          <input type="radio" name="role" value="0" id="admin" style="display: inline;"><label for="admin" style="display: inline;">Administrator</label><br>
+          <input type="radio" name="role" value="1" id="std" style="display: inline;" checked="checked"><label for="std" style="display: inline;">Standard</label><br>
           <br>
           <input type="submit">
         </form>

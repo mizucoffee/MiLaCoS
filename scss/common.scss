@@ -42,11 +42,17 @@ form {
   margin-left: 8px;
 }
 
-label {
+.form-title {
   font-size: 16pt;
   color: #04067a;
   display: block;
 }
+
+label {
+  display: block;
+}
+
+
 input {
   margin-top: 4px;
   margin-left: 8px;
@@ -61,7 +67,6 @@ input[type="text"], input[type="password"] {
 }
 
 input[type="radio"] {
-  display: inline;
   margin: 4px 4px 4px 8px;
 }
 
