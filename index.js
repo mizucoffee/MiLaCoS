@@ -25,7 +25,7 @@ const sessionMiddleware = session({
     db: 'session',
     host: process.env.MONGO_URI,
     port: '27017',
-    url: `mongodb://mongo/milacos`
+    url: `mongodb://${process.env.MONGO_URI}/milacos`
   }),
   secret: 'milacos',
   resave: false,
