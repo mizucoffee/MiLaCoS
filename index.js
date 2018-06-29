@@ -13,7 +13,7 @@ const express = require('express'),
   execSync = require('child_process').execSync,
   Schema = db.Schema
 
-db.connect(`mongodb://mongo/milacos`)
+db.connect(`mongodb://${process.env.MONGO_URI}/milacos`)
 
 const VPS = require('./db/vps.js')(db),
   User = require('./db/user.js')(db),
@@ -23,7 +23,7 @@ const VPS = require('./db/vps.js')(db),
 const sessionMiddleware = session({
   store: new MongoStore({
     db: 'session',
-    host: 'mongo',
+    host: process.env.MONGO_URI,
     port: '27017',
     url: `mongodb://mongo/milacos`
   }),
