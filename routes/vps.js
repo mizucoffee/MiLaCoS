@@ -85,7 +85,7 @@ module.exports = (db,VPS,User) => {
       )
       if (a == "notfound") break;
     }
-    let containers = JSON.parse(execSync('docker network inspect mizucoffee-net_milacos-network'))[0].Containers
+    let containers = JSON.parse(execSync('docker network inspect mizucoffeenet_milacos-network'))[0].Containers
     let iplist = Object.keys(containers).map(e => containers[e].IPv4Address.split("/")[0])
 
     let i = 2
