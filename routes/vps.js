@@ -85,8 +85,14 @@ module.exports = (db,VPS,User) => {
       )
       if (a == "notfound") break;
     }
+    let containers = JSON.parse(execSync('docker network inspect milacos_mizucoffee-net-network'))[0].Containers
+    let iplist = Object.keys(containers).map(e => containers[e].IPv4Address.split("/")[0])
 
-    let container_id = execSync(`docker run --restart=always --net=mizucoffeenet_mizucoffee-net-network -p ${port}:${port} -p  ${ssh_port}:22 --name ${addr} --cpus ${req.body.core} -m ${req.body.mem}G -d ssh_${req.body.os}`).toString().substr(0,12)
+    let i = 2
+    for(;iplist.some(e => e == "10.5.1." + i);i++);
+    let ip = `10.5.1.${i}`
+
+    let container_id = execSync(`docker run --restart=always --net=mizucoffeenet_milacos-networki --ip="${ip}" -p ${port}:${port} -p  ${ssh_port}:22 --name ${addr} --cpus ${req.body.core} -m ${req.body.mem}G -d ssh_${req.body.os}`).toString().substr(0,12)
     //    execSync(`mkdir /ssh/config/${container_id}; echo 'root@${addr}' > /ssh/config/${container_id}/sshpiper_upstream`)
     execSync(`ssh-keygen -t rsa -N '${req.body.password}' -f ./keys/${container_id}.id_rsa`)
     //    execSync(`ssh-keygen -t rsa -N '' -f /ssh/config/${container_id}/id_rsa`)
