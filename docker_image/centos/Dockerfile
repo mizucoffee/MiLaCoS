@@ -1,5 +1,7 @@
 FROM centos
 
+ENV TERM xterm
+
 RUN yum update && yum install -y openssh-server nano vim wget curl
 
 ENV NOTVISIBLE "in users profile"

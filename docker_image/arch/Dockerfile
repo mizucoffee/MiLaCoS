@@ -1,7 +1,9 @@
 FROM base/archlinux
 
+ENV TERM xterm
+
 RUN pacman -Syu --noconfirm && \
-  pacman --noconfirm -S openssh wget curl git
+  pacman --noconfirm -S openssh vim nano wget curl git
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
