@@ -94,10 +94,10 @@ module.exports = (db,VPS,User) => {
 
     let container_id = execSync(`docker run --restart=always --net=mizucoffeenet_milacos-network --ip="${ip}" -p ${port}:${port} -p  ${ssh_port}:22 --name ${addr} --cpus ${req.body.core} -m ${req.body.mem}G -d ssh_${req.body.os}`).toString().substr(0,12)
     //    execSync(`mkdir /ssh/config/${container_id}; echo 'root@${addr}' > /ssh/config/${container_id}/sshpiper_upstream`)
-    execSync(`ssh-keygen -t rsa -N '${req.body.password}' -f ./keys/${container_id}.id_rsa`)
+    execSync(`ssh-keygen -t rsa -N '${req.body.password}' -f /keys/${container_id}.id_rsa`)
     //    execSync(`ssh-keygen -t rsa -N '' -f /ssh/config/${container_id}/id_rsa`)
-    execSync(`docker cp ./keys/${container_id}.id_rsa.pub ${container_id}:/root/.ssh/`)
-    execSync(`rm ./keys/${container_id}.id_rsa.pub`)
+    execSync(`docker cp /keys/${container_id}.id_rsa.pub ${container_id}:/root/.ssh/`)
+    execSync(`rm /keys/${container_id}.id_rsa.pub`)
     execSync(`docker exec ${container_id} sh -c "mv /root/.ssh/${container_id}.id_rsa.pub /root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys"`)
     execSync(`echo 'server {listen 80; server_name ${container_id}.vps.mizucoffee.net;location / {proxy_pass http://${addr}/;proxy_http_version 1.1;proxy_header Upgrade $http_upgrade;proxy_set_header Connection "upgrade";proxy_set_header Host $host;}}' > /etc/nginx/conf.d/${container_id}.conf`)
     execSync(`nginx -s reload`)
@@ -142,7 +142,7 @@ module.exports = (db,VPS,User) => {
   })
 
   router.get('/key', tool.isLogined, isVPSExist, async (req,res) => {
-    res.download(`./keys/${req.query.id}.id_rsa`,`${req.query.id}.id_rsa`)
+    res.download(`/keys/${req.query.id}.id_rsa`,`${req.query.id}.id_rsa`)
   })
 
   router.get('/remove', tool.isLogined, isVPSExist, async (req,res) => {
