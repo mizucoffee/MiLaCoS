@@ -99,7 +99,7 @@ module.exports = (db,VPS,User) => {
     execSync(`docker cp /keys/${container_id}.id_rsa.pub ${container_id}:/root/.ssh/`)
     execSync(`rm /keys/${container_id}.id_rsa.pub`)
     execSync(`docker exec ${container_id} sh -c "mv /root/.ssh/${container_id}.id_rsa.pub /root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys"`)
-    execSync(`echo 'server {listen 80; server_name ${container_id}.vps.mizucoffee.net;location / {proxy_pass http://${addr}/;proxy_http_version 1.1;proxy_setproxy_header Upgrade $http_upgrade;proxy_set_header Connection "upgrade";proxy_set_header Host $host;}}' > /etc/nginx/conf.d/${container_id}.conf`)
+    execSync(`echo 'server {listen 80; server_name ${container_id}.vps.mizucoffee.net;location / {proxy_pass http://${addr}/;proxy_http_version 1.1;proxy_set_header Upgrade $http_upgrade;proxy_set_header Connection "upgrade";proxy_set_header Host $host;}}' > /etc/nginx/conf.d/${container_id}.conf`)
     execSync(`nginx -s reload`)
 
     let v = new VPS({
